@@ -24,6 +24,17 @@ class Params
     public array $scene_info = [];
     public array $settle_info = [];
 
+    // -------------
+    public string $transaction_id = '';
+    public string $out_refund_no = '';
+    public string $funds_reason = '';
+    public string $funds_account = '';
+    public string $funds_amount = '';
+    public string $funds_goods_detail = '';
+
+
+
+
 
     /**
      * @return array
@@ -165,6 +176,25 @@ class Params
     function setSettleInfo(array $settle_info){
         $this->settle_info= $settle_info;
     }
+
+
+    /**
+     *
+     */
+    function getRefundsParams(): array
+    {
+        return  $params =  [
+            'transaction_id'=>$this->transaction_id,
+            'out_trade_no'=>$this->out_trade_no,
+            'out_refund_no	'=>$this->out_refund_no	,
+            'reason'=>$this->funds_reason,
+            'notify_url'=>$this->notify_url,
+            'funds_account'=>$this->funds_account,
+            'amount'=>$this->amount,
+            'goods_detail'=>$this->funds_goods_detail,
+        ];
+    }
+
 
 
 

@@ -7,7 +7,6 @@ namespace Rmtop\Rmpay\lib\wxpay\v3;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
-use think\Exception;
 use WechatPay\GuzzleMiddleware\Util\PemUtil;
 use WechatPay\GuzzleMiddleware\WechatPayMiddleware;
 
@@ -23,7 +22,7 @@ class PayClient
      * @return array|void
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    function requestParams(string $url,string $type = 'post',$params){
+      function requestParams(string $url,string $type = 'post',$params){
 // 接下来，正常使用Guzzle发起API请求，WechatPayMiddleware会自动地处理签名和验签
         try{
              if($type == "get"){
@@ -53,7 +52,7 @@ class PayClient
      * @return array|\Psr\Http\Message\ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    function buildGetHttp(string $url,array $Params){
+  private  function buildGetHttp(string $url,array $Params){
             $params = http_build_query($Params);
             $getUrl = $url.$params;
              return $this->getClient()->request('GET', $getUrl, [
@@ -69,7 +68,7 @@ class PayClient
      * @return \Psr\Http\Message\ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    function buildPostHttp(string $url,array $Params): \Psr\Http\Message\ResponseInterface
+    private  function buildPostHttp(string $url,array $Params): \Psr\Http\Message\ResponseInterface
     {
          return   $this->getClient()->request('POST', $url, [
                 'headers' => [ 'Accept' => 'application/json' ],
@@ -83,7 +82,7 @@ class PayClient
     /**
      * @return Client
      */
-    function getClient(){
+    private function getClient(){
         // 商户相关配置
         $merchantId = '1000100'; // 商户号
         $merchantSerialNumber = 'XXXXXXXXXX'; // 商户API证书序列号
