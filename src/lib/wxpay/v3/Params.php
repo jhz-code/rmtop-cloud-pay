@@ -14,27 +14,29 @@ class Params
 {
 
 
-    public string $appId = ''; //必填
-    public string $mchid = '';  //必填
-    public string $description = '';  //必填
-    public string $out_trade_no = '';  //必填
-    public string $time_expire = '';
-    public string $attach = '';
-    public string $notify_url = '';  //必填
-    public string $goods_tag = '';
-    public array  $amount = [];  //必填
-    public array $payer = [];  //必填
-    public array $detail = [];
-    public array $scene_info = [];
-    public array $settle_info = [];
+
+    public  $appId = ''; //必填
+    public  $mchid = '';  //必填
+    public  $description = '';  //必填
+    public  $out_trade_no = '';  //必填
+    public  $time_expire = '';
+    public  $attach = '';
+    public  $notify_url = '';  //必填
+    public  $goods_tag = '';
+    public   $amount = [];  //必填
+    public  $payer = [];  //必填
+    public  $detail = [];
+    public  $scene_info = [];
+    public  $settle_info = [];
 
     // -------------
-    public string $transaction_id = '';
-    public string $out_refund_no = '';
-    public string $funds_reason = '';
-    public string $funds_account = '';
+    public  $transaction_id = '';
+    public  $out_refund_no = '';
+    public  $funds_reason = '';
+    public  $funds_account = '';
     public  $funds_amount =[];
     public  $funds_goods_detail = [];
+
 
 
     /**
