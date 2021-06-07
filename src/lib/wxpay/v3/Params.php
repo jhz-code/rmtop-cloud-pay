@@ -29,11 +29,8 @@ class Params
     public string $out_refund_no = '';
     public string $funds_reason = '';
     public string $funds_account = '';
-    public string $funds_amount = '';
-    public string $funds_goods_detail = '';
-
-
-
+    public  $funds_amount =[];
+    public  $funds_goods_detail = [];
 
 
     /**
@@ -175,6 +172,64 @@ class Params
      */
     function setSettleInfo(array $settle_info){
         $this->settle_info= $settle_info;
+    }
+
+
+
+
+    /**
+     * 原支付交易对应的微信订单号
+     * 设置$transaction_id
+     * @param $transaction_id
+     */
+    function setTransactionId($transaction_id){
+        $this->transaction_id = $transaction_id;
+    }
+
+
+    /**
+     * 原支付交易对应的商户订单号
+     * @param string $out_refund_no
+     */
+    function setOutRefundNo(string $out_refund_no){
+        $this->out_refund_no = $out_refund_no;
+    }
+
+
+    /**
+     * 若商户传入，会在下发给用户的退款消息中体现退款原因
+     * 设置退款理由
+     * @param string $funds_reason
+     */
+    function setFundsReason(string $funds_reason){
+        $this->funds_reason = $funds_reason;
+    }
+
+
+    /**
+     * 若传递此参数则使用对应的资金账户退款，否则默认使用未结算资金退款（仅对老资金流商户适用）
+     * @param $funds_account
+     */
+    function setFundsAccount($funds_account){
+        $this->funds_account = $funds_account;
+    }
+
+
+    /**
+     * 订单金额信息
+     * @param $funds_amount
+     */
+    function setFundsAmount($funds_amount){
+        $this->funds_amount = $funds_amount;
+    }
+
+
+    /**
+     * 指定商品退款需要传此参数，其他场景无需传递
+     * @param $funds_goods_detail
+     */
+    function setFundsGoodsDetail($funds_goods_detail){
+        $this->funds_goods_detail = $funds_goods_detail;
     }
 
 
