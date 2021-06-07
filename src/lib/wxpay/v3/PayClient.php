@@ -1,8 +1,13 @@
 <?php
+/**
+ * Created by YnRmsf.
+ * User: zhuok520@qq.com
+ * Date: 2021/6/8
+ * Time: 12:54 上午
+ */
 
 
-namespace Rmtop\Rmpay\lib\wxpay\v3;
-
+namespace RmTop\RmPay\lib\wxpay\v3;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -22,14 +27,14 @@ class PayClient
      * @return array|void
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-      function requestParams(string $url,string $type = 'post',$params){
+    function requestParams(string $url,string $type = 'post',$params){
 // 接下来，正常使用Guzzle发起API请求，WechatPayMiddleware会自动地处理签名和验签
         try{
-             if($type == "get"){
-                 $resp =  $this->buildGetHttp($url,$params);
-             }else{
-                 $resp =  $this->buildPostHttp($url,$params);
-             }
+            if($type == "get"){
+                $resp =  $this->buildGetHttp($url,$params);
+            }else{
+                $resp =  $this->buildPostHttp($url,$params);
+            }
             $res['StatusCode']= $resp->getStatusCode();
             $res['ReasonPhrase']= $resp->getReasonPhrase();
             $res['Body']= $resp->getBody();
@@ -52,12 +57,12 @@ class PayClient
      * @return array|\Psr\Http\Message\ResponseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-  private  function buildGetHttp(string $url,array $Params){
-            $params = http_build_query($Params);
-            $getUrl = $url.$params;
-             return $this->getClient()->request('GET', $getUrl, [
-                'headers' => [ 'Accept' => 'application/json' ]
-            ]);
+    private  function buildGetHttp(string $url,array $Params){
+        $params = http_build_query($Params);
+        $getUrl = $url.$params;
+        return $this->getClient()->request('GET', $getUrl, [
+            'headers' => [ 'Accept' => 'application/json' ]
+        ]);
     }
 
 
@@ -70,10 +75,10 @@ class PayClient
      */
     private  function buildPostHttp(string $url,array $Params): \Psr\Http\Message\ResponseInterface
     {
-         return   $this->getClient()->request('POST', $url, [
-                'headers' => [ 'Accept' => 'application/json' ],
-                'json' => [json_encode($Params) ],
-            ]);
+        return   $this->getClient()->request('POST', $url, [
+            'headers' => [ 'Accept' => 'application/json' ],
+            'json' => [json_encode($Params) ],
+        ]);
 
 
     }

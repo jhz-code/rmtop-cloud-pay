@@ -1,15 +1,19 @@
 <?php
-
-
-namespace Rmtop\Rmpay\lib\wxpay\v3;
-
 /**
- * Class Params
- * @package Rmtop\Rmpay\lib\wxpay\v3
+ * Created by YnRmsf.
+ * User: zhuok520@qq.com
+ * Date: 2021/6/8
+ * Time: 12:52 上午
  */
+
+
+namespace RmTop\RmPay\lib\wxpay\v3;
+
 
 class Params
 {
+
+
     public string $appId = ''; //必填
     public string $mchid = '';  //必填
     public string $description = '';  //必填
@@ -39,20 +43,20 @@ class Params
      */
     function getParams(): array
     {
-       return  $params =  [
-           'appid'=>$this->appId,
-           'mchid'=>$this->mchid,
-           'description'=>$this->description,
-           'out_trade_no'=>$this->out_trade_no,
-           'time_expire'=>$this->time_expire,
-           'attach'=>$this->attach,
-           'notify_url'=>$this->notify_url,
-           'goods_tag'=>$this->goods_tag,
-           'amount'=>$this->amount,
-           'payer'=>$this->payer,
-           'detail'=>$this->detail,
-           'scene_info'=>$this->scene_info,
-           'settle_info'=>$this->settle_info,
+        return  $params =  [
+            'appid'=>$this->appId,
+            'mchid'=>$this->mchid,
+            'description'=>$this->description,
+            'out_trade_no'=>$this->out_trade_no,
+            'time_expire'=>$this->time_expire,
+            'attach'=>$this->attach,
+            'notify_url'=>$this->notify_url,
+            'goods_tag'=>$this->goods_tag,
+            'amount'=>$this->amount,
+            'payer'=>$this->payer,
+            'detail'=>$this->detail,
+            'scene_info'=>$this->scene_info,
+            'settle_info'=>$this->settle_info,
         ];
     }
 
@@ -88,10 +92,10 @@ class Params
     }
 
 
-      /**
+    /**
      * @param string $out_trade_no
-       *  商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一
-      示例值：1217752501201407033233368018
+     *  商户系统内部订单号，只能是数字、大小写字母_-*且在同一个商户号下唯一
+    示例值：1217752501201407033233368018
      */
     function setOutTradeNo(string $out_trade_no){
         $this->out_trade_no =$out_trade_no;
@@ -249,8 +253,6 @@ class Params
             'goods_detail'=>$this->funds_goods_detail,
         ];
     }
-
-
 
 
 

@@ -5,12 +5,10 @@
  * Date: 2021/6/7
  * Time: 9:20 下午
  */
-
-
 namespace RmTop\RmPay\core;
 use GuzzleHttp\Exception\GuzzleException;
-use Rmtop\Rmpay\lib\wxpay\v3\Params;
-use Rmtop\Rmpay\lib\wxpay\v3\PayClient;
+use RmTop\RmPay\lib\wxpay\v3\Params;
+use RmTop\RmPay\lib\wxpay\v3\PayClient;
 
 class TopWxPay
 {
@@ -24,7 +22,7 @@ class TopWxPay
     function JsApi($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
-        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        return (new PayClient())->requestParams($url, 'POST', $this->makeParams($data));
     }
 
 
@@ -37,7 +35,7 @@ class TopWxPay
     function AppApi($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/app';
-        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        return (new PayClient())->requestParams($url, 'POST', $this->makeParams($data));
     }
 
 
@@ -50,7 +48,7 @@ class TopWxPay
     function H5Api($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/app';
-        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        return (new PayClient())->requestParams($url, 'POST', $this->makeParams($data));
     }
 
 
@@ -63,7 +61,7 @@ class TopWxPay
     function NativeApi($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/app';
-        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        return (new PayClient())->requestParams($url, 'POST', $this->makeParams($data));
     }
 
 
@@ -75,7 +73,7 @@ class TopWxPay
     function queryRefunds($data)
     {
         $url = "https://api.mch.weixin.qq.com/v3/refund/domestic/refunds";
-        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        return (new PayClient())->requestParams($url, 'POST', $this->makeParams($data));
     }
 
 
@@ -83,7 +81,7 @@ class TopWxPay
      * @param array $data
      * @return array
      */
-    static function makeParams(array $data): array
+     function makeParams(array $data): array
     {
         $Params = new Params();
         $Params->setAppid('');

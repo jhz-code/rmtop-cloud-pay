@@ -1,7 +1,13 @@
 <?php
+/**
+ * Created by YnRmsf.
+ * User: zhuok520@qq.com
+ * Date: 2021/6/8
+ * Time: 12:55 上午
+ */
 
 
-namespace Rmtop\Rmpay\lib\wxpay\v3;
+namespace RmTop\RmPay\lib\wxpay\v3;
 
 
 use GuzzleHttp\Exception\GuzzleException;
@@ -93,10 +99,10 @@ class WxQuery
      * 申请资金账单API
      * @param string $bill_date  格式YYYY-MM-DD
      * @param string $account_type   不填则默认是BASIC
-     枚举值：
-     BASIC：基本账户
-     OPERATION：运营账户
-     FEES：手续费账户
+    枚举值：
+    BASIC：基本账户
+    OPERATION：运营账户
+    FEES：手续费账户
      * @param string $tar_type
      *  不填则默认是数据流
     枚举值：
@@ -111,7 +117,6 @@ class WxQuery
         $data['tar_type'] = $tar_type;
         return (new PayClient())->requestParams($url,'get',$data);
     }
-
 
 
 
