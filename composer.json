@@ -1,0 +1,13 @@
+{
+    "name": "rmtop/rmtop-could-pay",
+    "description": "\"pay mananage\"",
+    "require": {
+        "topthink/think-migration": "^3.0"
+    },
+    "authors": [
+        {
+            "name": "zjh",
+            "email": "hezuo@ynrmsf.com"
+        }
+    ]
+}
