@@ -1,8 +1,8 @@
 <?php
 
-namespace RmTop\Rmpay;
+namespace RmTop\RmPay;
 
-use RmTop\Rmpay\command\PayFilePublish;
+use RmTop\RmPay\command\PayFilePublish;
 use think\Service;
 
 /**

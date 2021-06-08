@@ -1,7 +1,7 @@
 <?php
 
 
-namespace RmTop\Rmpay\lib;
+namespace RmTop\RmPay\lib;
 
 
 class PublishFile

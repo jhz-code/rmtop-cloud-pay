@@ -1,6 +1,6 @@
 <?php
 
-namespace RmTop\Rmpay\model;
+namespace RmTop\RmPay\model;
 
 use think\Model;
 

@@ -22,7 +22,7 @@
     "extra": {
         "think": {
             "services": [
-                "RmTop\\Rmpay\\RmPayService"
+                "RmTop\\RmPay\\RmPayService"
             ]
         }
     }

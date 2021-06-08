@@ -1,10 +1,10 @@
 <?php
 
 
-namespace RmTop\Rmpay\command;
+namespace RmTop\RmPay\command;
 
 
-use RmTop\Rmpay\lib\PublishFile;
+use RmTop\RmPay\lib\PublishFile;
 use think\console\Command;
 use think\console\Input;
 use think\console\input\Argument;
