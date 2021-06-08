@@ -18,6 +18,12 @@ use WechatPay\GuzzleMiddleware\WechatPayMiddleware;
 class PayClient
 {
 
+    protected $merchantId = ''; // 商户号;
+    protected $merchantSerialNumber  = ''; // 商户API证书序列号
+    protected $apiV3key = '';
+    protected $merchantPrivateKey; //商户私钥;
+    protected $wechatpayCertificate;  //微信支付平台证书;
+
 
     /**
      * 用Guzzle发起API请求
@@ -83,26 +89,39 @@ class PayClient
     }
 
 
+
     /**
+     * 加载证书
+     */
+    function getMerchant(){
+        $this->merchantPrivateKey =    PemUtil::loadPrivateKey(app()->getRuntimePath().DIRECTORY_SEPARATOR.'cert'.DIRECTORY_SEPARATOR.'apiclient_key.pem');//商户密钥
+    }
+
+
+
+    /**
+     * @param false $first 是否是第一获取证书，true为是
      * @return Client
      */
-    private function getClient(){
-        // 商户相关配置
-        $merchantId = '1000100'; // 商户号
-        $merchantSerialNumber = 'XXXXXXXXXX'; // 商户API证书序列号
-        $merchantPrivateKey = PemUtil::loadPrivateKey('/path/to/mch/private/key.pem'); // 商户私钥
-        // 微信支付平台配置
-        $wechatpayCertificate = PemUtil::loadCertificate('/path/to/wechatpay/cert.pem'); // 微信支付平台证书
+    function getClient($first = false): Client
+    {
         // 构造一个WechatPayMiddleware
-        $wechatpayMiddleware = WechatPayMiddleware::builder()
-            ->withMerchant($merchantId, $merchantSerialNumber, $merchantPrivateKey) // 传入商户相关配置
-            ->withWechatPay([ $wechatpayCertificate ]) // 可传入多个微信支付平台证书，参数类型为array
-            ->build();
-// 将WechatPayMiddleware添加到Guzzle的HandlerStack中
+        $this->getMerchant();//获取证书
+        $wechatpayMiddleware = WechatPayMiddleware::builder()->withMerchant($this->merchantId, $this->merchantSerialNumber, $this->merchantPrivateKey); // 传入商户相关配置
+        if(!$first){
+            //如果不是第一次，则调用证书开始验签
+            $this->wechatpayCertificate =  PemUtil::loadCertificate(app()->getRuntimePath().DIRECTORY_SEPARATOR.'cert'.DIRECTORY_SEPARATOR.'wechatpay_327B4963545B0215E88749B65404A2E16148F82A.pem'); // 微信支付平台证书 ; // 商户私钥
+            $wechatpayMiddleware->withWechatPay([$this->wechatpayCertificate]); // 可传入多个微信支付平台证书，参数类型为array
+        }else{
+            $wechatpayMiddleware->withValidator(new NoopValidator); // 临时"跳过”应答签名的验证
+        }
+        // 将WechatPayMiddleware添加到Guzzle的HandlerStack中
         $stack = HandlerStack::create();
-        $stack->push($wechatpayMiddleware, 'wechatpay');
-        return new Client(['handler' =>$stack]);
+        $stack->push($wechatpayMiddleware->build(), 'wechatpay');
+        // 创建Guzzle HTTP Client时，将HandlerStack传入
+        return new Client(['handler' => $stack]);
     }
+
 
 
 
