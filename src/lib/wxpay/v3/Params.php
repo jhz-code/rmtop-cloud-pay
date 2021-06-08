@@ -134,7 +134,7 @@ class Params
      * 订单优惠标记 示例值：WXG
      */
     function setGoodsTag(string $goods_tag){
-        $this->notify_url =$goods_tag;
+        $this->goods_tag =$goods_tag;
     }
 
     /**

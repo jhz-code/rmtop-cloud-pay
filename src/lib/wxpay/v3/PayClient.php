@@ -43,14 +43,15 @@ class PayClient
             }
             $res['StatusCode']= $resp->getStatusCode();
             $res['ReasonPhrase']= $resp->getReasonPhrase();
-            $res['Body']= $resp->getBody();
+            $res['Body']=  json_decode($resp->getBody(),true);
             return $res;
         } catch (RequestException $e){
             // 进行错误处理
-            echo $e->getMessage()."\n";
-            if ($e->hasResponse()) {
-                echo $e->getResponse()->getStatusCode().' '.$e->getResponse()->getReasonPhrase()."\n";
-                echo $e->getResponse()->getBody();
+            if($e){
+                $res['StatusCode']=$e->getResponse()->getStatusCode();
+                $res['ReasonPhrase']=$e->getResponse()->getReasonPhrase();
+                $res['Message']= $e->getMessage();
+                return $res;
             }
             return;
         }
@@ -94,7 +95,7 @@ class PayClient
      * 加载证书
      */
     function getMerchant(){
-        $this->merchantPrivateKey =    PemUtil::loadPrivateKey(app()->getRuntimePath().DIRECTORY_SEPARATOR.'cert'.DIRECTORY_SEPARATOR.'apiclient_key.pem');//商户密钥
+        $this->merchantPrivateKey =    PemUtil::loadPrivateKey(dirname(__DIR__).'/prvate/'.'cert'.DIRECTORY_SEPARATOR.'apiclient_key.pem');//商户密钥
     }
 
 
@@ -110,7 +111,7 @@ class PayClient
         $wechatpayMiddleware = WechatPayMiddleware::builder()->withMerchant($this->merchantId, $this->merchantSerialNumber, $this->merchantPrivateKey); // 传入商户相关配置
         if(!$first){
             //如果不是第一次，则调用证书开始验签
-            $this->wechatpayCertificate =  PemUtil::loadCertificate(app()->getRuntimePath().DIRECTORY_SEPARATOR.'cert'.DIRECTORY_SEPARATOR.'wechatpay_327B4963545B0215E88749B65404A2E16148F82A.pem'); // 微信支付平台证书 ; // 商户私钥
+            $this->wechatpayCertificate =  PemUtil::loadCertificate(dirname(__DIR__).'/prvate/'.'cert'.DIRECTORY_SEPARATOR.'wechatpay_327B4963545B0215E88749B65404A2E16148F82A.pem'); // 微信支付平台证书 ; // 商户私钥
             $wechatpayMiddleware->withWechatPay([$this->wechatpayCertificate]); // 可传入多个微信支付平台证书，参数类型为array
         }else{
             $wechatpayMiddleware->withValidator(new NoopValidator); // 临时"跳过”应答签名的验证

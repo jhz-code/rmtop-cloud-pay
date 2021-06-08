@@ -22,7 +22,7 @@ class TopWxPay
    static   function JsApi($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
-        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        return (new PayClient())->requestParams($url, 'post', self::makeParams($data));
     }
 
 
@@ -84,26 +84,25 @@ class TopWxPay
     static  function makeParams(array $data): array
     {
         $Params = new Params();
-        $Params->setAppid('');
-        $Params->setMchid('');
-        $Params->setDescription('');
-        $Params->setOutTradeNo('');
-        $Params->setTimeExpire('');
-        $Params->setAttach('');
-        $Params->setNotifyUrl('');
-        $Params->setGoodsTag('');
-        $Params->setAmount([]);
-        $Params->setPayer([]);
-        $Params->setDetail([]);
-        $Params->setSceneInfo([]);
-        $Params->setSettleInfo([]);
-        $Params->setTransactionId('');
-        $Params->setOutRefundNo('');
-        $Params->setFundsReason('');
-        $Params->setFundsAccount('');
-        $Params->setAmount([]);
-        $Params->setFundsGoodsDetail([]);
-        return $Params->getParams();
+        $Params->setAppid($data['appid'] ?? '');
+        $Params->setMchid($data['mchid'] ?? '');
+        $Params->setDescription($data['description'] ?? '');
+        $Params->setOutTradeNo($data['out_trade_no'] ?? '');
+        $Params->setTimeExpire($data['time_expire'] ?? '');
+        $Params->setAttach($data['attach'] ?? '');
+        $Params->setNotifyUrl($data['notify_url'] ?? '');
+        $Params->setGoodsTag($data['goods_tag'] ?? '');
+        $Params->setAmount($data['amount'] ??[]);
+        $Params->setPayer($data['payer'] ?? []);
+        $Params->setDetail($data['detail'] ??[]);
+        $Params->setSceneInfo($data['scene_info'] ??[]);
+        $Params->setSettleInfo($data['settle_Info'] ??[]);
+        $Params->setTransactionId($data['transaction_id'] ?? '');
+        $Params->setOutRefundNo($data['out_refund_no'] ?? '');
+        $Params->setFundsReason($data['funds_reason'] ?? '');
+        $Params->setFundsAccount($data['funds_account'] ?? '');
+        $Params->setFundsGoodsDetail($data['funds_goods_detail'] ?? '');
+        return array_filter($Params->getParams());
     }
 
 
