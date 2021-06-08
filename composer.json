@@ -1,5 +1,5 @@
 {
-    "name": "rmtop/rmtop-cloud-pay",
+    "name": "rmtop/rmsf-cloud-pay",
     "description": "\"pay mananage\"",
     "require": {
         "topthink/think-migration": "^3.0",
