@@ -13,6 +13,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use RmTop\RmPay\core\TopPayConfig;
+use think\Exception;
+use WechatPay\GuzzleMiddleware\Util\AesUtil;
 use WechatPay\GuzzleMiddleware\Util\PemUtil;
 use WechatPay\GuzzleMiddleware\WechatPayMiddleware;
 
@@ -151,6 +153,56 @@ class PayClient
         return base64_encode($raw_sign);
     }
 
+
+    /**
+     * 支付回调
+     * 订单回调数据处理
+     * @param  $request
+     * @return mixed
+     * @throws Exception
+     */
+     function Notify($request){
+        $decrypted = new AesUtil($this->apiV3key);
+        $resource = $request['resource'];
+        $plain = $decrypted->decryptToString(
+            $resource['associated_data'],
+            $resource['nonce'],
+            $resource['ciphertext']
+        );
+        if (!$plain) {
+            throw new Exception("校验失败!");
+        }else{
+            $result = json_decode($plain,true);
+            if($result['trade_state']){
+                return $result;  //返回支付成功的信息
+             //   exit(json(['code'=>'SUCCESS','message'=>'']));
+            }else{
+                exit(json(['code'=>'Error','message'=>'订单未支付成功,拒绝处理']));
+            }
+        }
+
+    }
+
+
+    /**
+     *  退款回调参数
+     * @return mixed
+     * @throws Exception
+     */
+    function refundNotify($request){
+        $decrypted = new AesUtil($this->apiV3key);
+        $resource = $request['resource'];
+        $plain = $decrypted->decryptToString(
+            $resource['associated_data'],
+            $resource['nonce'],
+            $resource['ciphertext']
+        );
+        if (!$plain) {
+            throw new Exception("校验失败!");
+        }else{
+            return json_decode($plain,true);
+        }
+    }
 
 
 }

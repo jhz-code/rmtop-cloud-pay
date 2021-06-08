@@ -47,6 +47,7 @@ TopPayConfig::addConfig($data);
 ##### jsApi支付 <br><br>
 
 `$result =    TopWxPay::JsApi([
+'configId'=>'1',
 'appid'=>'wxc1ee20xxxxx',
 'mchid'=>'1519xxxxx',
 'description'=>'支持测试',
@@ -60,6 +61,7 @@ TopPayConfig::addConfig($data);
 ##### h5支付 <br><br>
 
 `$result =    TopWxPay::H5Api([
+'configId'=>'1',
 'appid'=>'wxxxxxxxxxx7',
 'mchid'=>'15196xxxxxx',
 'description'=>'支持测试',
@@ -74,6 +76,7 @@ TopPayConfig::addConfig($data);
 ##### app支付 <br><br>
 
 `$result =    TopWxPay::AppApi([
+'configId'=>'1',
 'appid'=>'wxc1eexxxxxxxx',
 'mchid'=>'1519xxxxx',
 'description'=>'支持测试',
@@ -86,6 +89,7 @@ TopPayConfig::addConfig($data);
 ##### Native 支付 二维码支付 <br><br>
 
 `$result =    TopWxPay::NativeApi([
+'configId'=>'1',
 'appid'=>'wxc1ee20xxxx',
 'mchid'=>'1519xxx',
 'description'=>'支持测试',
@@ -116,3 +120,20 @@ TopPayConfig::addConfig($data);
 
 #### 申请资金账单API
 `function fundFloBill(string $bill_date,string $account_type ='BASIC',string $tar_type='')`
+
+
+#### 支付回调处理
+
+如果能得到返回数据，则接受数据并验证成功，只需根据参数处理订单即可：
+
+`$result =  (new PayClient())->Notify(intput());
+if($result['out_trade_no']){
+  //处理订单
+}
+exit(json(['code'=>'SUCCESS','message'=>'']));//通知微信支付网关
+`
+
+#### 退款回调处理
+`$result =  (new PayClient())->Notify(intput());
+`
+$result 为退款回调通知数据
