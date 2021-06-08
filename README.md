@@ -11,11 +11,36 @@
 
 ### 发布支付文件 <br>
 
-php think rmtop:publish_pay
+`php think rmtop:publish_pay
+`
+
+### 数据迁移 创建支付相关配置文件
+
+`php think migrate:run
+`
 
 
-### 
+### 支付配置操作
 
+`function addConfig(array $data) //创建配置
+`
+
+`editConfig(int $id, array $data)`
+
+
+`deleteConfig(int $id)`
+
+`
+getConfig(int $id) //获取配置`
+
+
+#### 微信支付配置
+
+`$data['merchantId'] = '15196xxxx';
+$data['merchantSerialNumber'] = '6A6E499099E0F19FE334Cxxxxxxxx';
+$data['apiV3key'] = 'xN5nxxxxxxxxx;
+TopPayConfig::addConfig($data);
+`
 
 ## 微信V3版相关支付
 
