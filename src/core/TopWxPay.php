@@ -19,10 +19,10 @@ class TopWxPay
      * @return array|void
      * @throws GuzzleException
      */
-    function JsApi($data)
+   static   function JsApi($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
-        return (new PayClient())->requestParams($url, 'POST', $this->makeParams($data));
+        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
     }
 
 
@@ -32,10 +32,10 @@ class TopWxPay
      * @return array|void
      * @throws GuzzleException
      */
-    function AppApi($data)
+   static function AppApi($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/app';
-        return (new PayClient())->requestParams($url, 'POST', $this->makeParams($data));
+        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
     }
 
 
@@ -45,10 +45,10 @@ class TopWxPay
      * @return array|void
      * @throws GuzzleException
      */
-    function H5Api($data)
+    static function H5Api($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/app';
-        return (new PayClient())->requestParams($url, 'POST', $this->makeParams($data));
+        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
     }
 
 
@@ -58,10 +58,10 @@ class TopWxPay
      * @return array|void
      * @throws GuzzleException
      */
-    function NativeApi($data)
+    static  function NativeApi($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/app';
-        return (new PayClient())->requestParams($url, 'POST', $this->makeParams($data));
+        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
     }
 
 
@@ -70,10 +70,10 @@ class TopWxPay
      * @return array|void
      * @throws GuzzleException
      */
-    function queryRefunds($data)
+    static function queryRefunds($data)
     {
         $url = "https://api.mch.weixin.qq.com/v3/refund/domestic/refunds";
-        return (new PayClient())->requestParams($url, 'POST', $this->makeParams($data));
+        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
     }
 
 
@@ -81,7 +81,7 @@ class TopWxPay
      * @param array $data
      * @return array
      */
-     function makeParams(array $data): array
+    static  function makeParams(array $data): array
     {
         $Params = new Params();
         $Params->setAppid('');

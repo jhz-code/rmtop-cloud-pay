@@ -80,7 +80,6 @@ class PayClient
             'json' => [json_encode($Params) ],
         ]);
 
-
     }
 
 
