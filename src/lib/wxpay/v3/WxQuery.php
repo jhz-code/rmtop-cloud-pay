@@ -23,7 +23,7 @@ class WxQuery
      * @return array|void
      * @throws GuzzleException
      */
-    function queryByTransactions(string $transaction_id,string $mchid){
+    static function queryByTransactions(string $transaction_id,string $mchid){
         $url = "https://api.mch.weixin.qq.com/v3/pay/transactions/id/{$transaction_id}";
         return (new PayClient())->requestParams($url,'get',['mchid'=>$mchid]);
     }
@@ -36,7 +36,7 @@ class WxQuery
      * @return array|void
      * @throws GuzzleException
      */
-    function queryByOrderId(string $orderId,string $mchid){
+    static  function queryByOrderId(string $orderId,string $mchid){
         $url = "https://api.mch.weixin.qq.com/v3/pay/transactions/out-trade-no/{$orderId}";
         return (new PayClient())->requestParams($url,'get',['mchid'=>$mchid]);
     }
@@ -49,7 +49,7 @@ class WxQuery
      * @return array|void
      * @throws GuzzleException
      */
-    function closeOrder(string $orderId,string $mchid){
+    static  function closeOrder(string $orderId,string $mchid){
         $url = "https://api.mch.weixin.qq.com/v3/pay/transactions/out-trade-no/{$orderId}/close";
         return (new PayClient())->requestParams($url,'POST',['mchid'=>$mchid]);
     }
@@ -61,7 +61,7 @@ class WxQuery
      * @throws GuzzleException
      *
      */
-    function queryRefundsOrder($out_refund_no){
+    static function queryRefundsOrder($out_refund_no){
         $url = "https://api.mch.weixin.qq.com/v3/refund/domestic/refunds/{$out_refund_no}";
         return (new PayClient())->requestParams($url,'get',[]);
     }
@@ -85,12 +85,12 @@ class WxQuery
     枚举值：
     GZIP：返回格式为.gzip的压缩包账单
      */
-    function queryTradeBill(string $bill_date,string $bill_type,string $tar_type){
+    static function queryTradeBill(string $bill_date,string $bill_type = 'ALL',string $tar_type = ''){
         $url = "https://api.mch.weixin.qq.com/v3/bill/tradebill";
         $data['bill_date'] =$bill_date;
         $data['bill_type'] = $bill_type;
         $data['tar_type'] = $tar_type;
-        return (new PayClient())->requestParams($url,'get',$data);
+        return (new PayClient())->requestParams($url,'get',array_filter($data));
     }
 
 
@@ -110,14 +110,13 @@ class WxQuery
      * @return array|void
      * @throws GuzzleException
      */
-    function fundFloBill(string $bill_date,string $account_type,string $tar_type){
+    static function fundFloBill(string $bill_date,string $account_type ='BASIC',string $tar_type=''){
         $url = "https://api.mch.weixin.qq.com/v3/bill/fundflowbill";
         $data['bill_date'] = $bill_date;
         $data['account_type'] = $account_type;
         $data['tar_type'] = $tar_type;
-        return (new PayClient())->requestParams($url,'get',$data);
+        return (new PayClient())->requestParams($url,'get',array_filter($data));
     }
-
 
 
 }

@@ -19,10 +19,24 @@ class TopWxPay
      * @return array|void
      * @throws GuzzleException
      */
-   static   function JsApi($data)
+    static   function JsApi($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi';
-        return (new PayClient())->requestParams($url, 'post', self::makeParams($data));
+        $result = (new PayClient())->requestParams($url, 'post', self::makeParams($data));
+        if($result['StatusCode'] == 200){
+            $pay['appid'] = $data['appid'];
+            $pay['noncestr'] = (new PayClient())->randCode();
+            $pay['package'] = "Sign=WXPay";
+            $pay['partnerid'] = $data['mchid'];
+            $pay['prepayid'] = $result['Body']['prepay_id'];
+            $pay['timestamp'] = time();
+            //app 支付签名
+            $message = $pay['appid']."\n".$pay['timestamp']."\n".$pay['noncestr']."\n".$pay['prepayid']."\n";
+            $pay['sign'] =  (new PayClient())->getSign($message);
+            return $pay;
+        }else{
+            return $result;
+        }
     }
 
 
@@ -32,10 +46,24 @@ class TopWxPay
      * @return array|void
      * @throws GuzzleException
      */
-   static function AppApi($data)
+    static function AppApi($data)
     {
         $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/app';
-        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        $result = (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        if($result['StatusCode'] == 200){
+            $pay['appid'] = $data['appid'];
+            $pay['noncestr'] = (new PayClient())->randCode();
+            $pay['package'] = "Sign=WXPay";
+            $pay['partnerid'] = $data['mchid'];
+            $pay['prepayid'] = $result['Body']['prepay_id'];
+            $pay['timestamp'] = time();
+            //app 支付签名
+            $message = $pay['appid']."\n".$pay['timestamp']."\n".$pay['noncestr']."\n".$pay['prepayid']."\n";
+            $pay['sign'] =  (new PayClient())->getSign($message);
+            return $pay;
+        }else{
+            return $result;
+        }
     }
 
 
@@ -47,22 +75,35 @@ class TopWxPay
      */
     static function H5Api($data)
     {
-        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/app';
-        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/h5';
+        $result =  (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        if($result['StatusCode'] == 200){
+            $pay['h5_url'] = $result['Body']['h5_url'];
+            return $pay;
+        }else{
+            return $result;
+        }
     }
 
 
     /**
-     * 获取原生支付
+     * 获取原生支付 二维码支付
      * @param $data
      * @return array|void
      * @throws GuzzleException
      */
     static  function NativeApi($data)
     {
-        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/app';
-        return (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        $url = 'https://api.mch.weixin.qq.com/v3/pay/transactions/native';
+        $result = (new PayClient())->requestParams($url, 'POST', self::makeParams($data));
+        if($result['StatusCode'] == 200){
+            $pay['code_url'] = $result['Body']['code_url'];
+            return $pay;
+        }else{
+            return $result;
+        }
     }
+
 
 
     /**

@@ -66,7 +66,7 @@ class PayClient
      */
     private  function buildGetHttp(string $url,array $Params){
         $params = http_build_query($Params);
-        $getUrl = $url.$params;
+        $getUrl = $url."?".$params;
         return $this->getClient()->request('GET', $getUrl, [
             'headers' => [ 'Accept' => 'application/json' ]
         ]);
@@ -84,7 +84,7 @@ class PayClient
     {
         return   $this->getClient()->request('POST', $url, [
             'headers' => [ 'Accept' => 'application/json' ],
-            'json' => [json_encode($Params) ],
+            'json' => $Params,
         ]);
 
     }
@@ -123,6 +123,28 @@ class PayClient
         return new Client(['handler' => $stack]);
     }
 
+
+
+
+    //生成随机字符串
+    function randCode(){
+        $str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';//62个字符
+        $str = str_shuffle($str);
+        $str = substr($str,0,32);
+        return  $str;
+    }
+
+
+    /**
+     * V3加密
+     * @param $signParam //加密参数
+     * @return string  //返回加密数据
+     */
+    function getSign($signParam){
+        $this->getMerchant();
+        openssl_sign($signParam, $raw_sign,$this->merchantPrivateKey, 'sha256WithRSAEncryption');
+        return base64_encode($raw_sign);
+    }
 
 
 
