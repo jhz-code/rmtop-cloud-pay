@@ -3,9 +3,11 @@
 
 支付管理
 
-云端支付sdk
+云端支付sdk <br>
 
-
+### 安装 <br>
+`composer require rmtop/rmsf-cloud-pay
+`
 
 
 ## 微信V3版相关支付
