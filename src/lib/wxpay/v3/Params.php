@@ -10,6 +10,8 @@
 namespace RmTop\RmPay\lib\wxpay\v3;
 
 
+use RmTop\RmPay\core\TopPayConfig;
+
 class Params
 {
 
@@ -36,6 +38,7 @@ class Params
     public  $funds_account = '';
     public  $funds_amount =[];
     public  $funds_goods_detail = [];
+    public  $pay_config = [];
 
 
 
@@ -46,6 +49,7 @@ class Params
     function getParams(): array
     {
         return  $params =  [
+            'pay_config' => $this->pay_config,
             'appid'=>$this->appId,
             'mchid'=>$this->mchid,
             'description'=>$this->description,
@@ -69,6 +73,18 @@ class Params
      */
     function setAppid(string $appId){
         $this->appId =$appId;
+    }
+
+    /**
+     * @param string $configId
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * 获取配置
+     */
+    function setConfigId(int $configId){
+        $result = TopPayConfig::getConfig($configId);
+        $this->pay_config = $result ;
     }
 
 
@@ -245,6 +261,7 @@ class Params
     function getRefundsParams(): array
     {
         return  $params =  [
+            'pay_config' => $this->pay_config,
             'transaction_id'=>$this->transaction_id,
             'out_trade_no'=>$this->out_trade_no,
             'out_refund_no	'=>$this->out_refund_no	,

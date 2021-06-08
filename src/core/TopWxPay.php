@@ -125,6 +125,7 @@ class TopWxPay
     static  function makeParams(array $data): array
     {
         $Params = new Params();
+        $Params->setConfigId($data['ConfigId']);
         $Params->setAppid($data['appid'] ?? '');
         $Params->setMchid($data['mchid'] ?? '');
         $Params->setDescription($data['description'] ?? '');

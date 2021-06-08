@@ -12,6 +12,7 @@ namespace RmTop\RmPay\lib\wxpay\v3;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
+use RmTop\RmPay\core\TopPayConfig;
 use WechatPay\GuzzleMiddleware\Util\PemUtil;
 use WechatPay\GuzzleMiddleware\WechatPayMiddleware;
 
@@ -35,6 +36,10 @@ class PayClient
      */
     function requestParams(string $url,string $type = 'post',$params){
 // 接下来，正常使用Guzzle发起API请求，WechatPayMiddleware会自动地处理签名和验签
+        $this->merchantId = $params['pay_config']['merchantId'] ;
+        $this->merchantSerialNumber =$params['pay_config']['merchantSerialNumber']  ;
+        $this->apiV3key = $params['pay_config']['apiV3key'] ;
+        unset($params['pay_config']);//删除配置项
         try{
             if($type == "get"){
                 $resp =  $this->buildGetHttp($url,$params);

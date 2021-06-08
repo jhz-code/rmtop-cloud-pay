@@ -18,5 +18,12 @@
         "psr-4": {
             "RmTop\\RmPay\\": "src/"
         }
+    },
+    "extra": {
+        "think": {
+            "services": [
+                "RmTop\\Rmpay\\RmPayService"
+            ]
+        }
     }
 }
