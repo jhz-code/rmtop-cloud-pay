@@ -9,6 +9,13 @@
 `composer require rmtop/rmsf-cloud-pay
 `
 
+### 发布支付文件 <br>
+
+php think rmtop:publish_pay
+
+
+### 
+
 
 ## 微信V3版相关支付
 

@@ -2,7 +2,7 @@
 
 
 namespace RmTop\RmPay\core;
-use RmTop\Rmpay\model\TopPayConfigModel;
+use RmTop\RmPay\model\TopPayConfigModel;
 
 /**
  * Class TopPayConfig
