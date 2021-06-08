@@ -10,7 +10,7 @@
 
 ## 微信V3版相关支付
 
-####jsApi支付 <br><br>
+##### jsApi支付 <br><br>
 
 `$result =    TopWxPay::JsApi([
 'appid'=>'wxc1ee20xxxxx',
@@ -23,7 +23,7 @@
 ]);
 `
 
-####h5支付 <br><br>
+##### h5支付 <br><br>
 
 `$result =    TopWxPay::H5Api([
 'appid'=>'wxxxxxxxxxx7',
@@ -37,7 +37,8 @@
 
 
 
-#####app支付 <br><br>
+##### app支付 <br><br>
+
 `$result =    TopWxPay::AppApi([
 'appid'=>'wxc1eexxxxxxxx',
 'mchid'=>'1519xxxxx',
