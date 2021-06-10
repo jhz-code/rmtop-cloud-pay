@@ -137,3 +137,9 @@ exit(json(['code'=>'SUCCESS','message'=>'']));//通知微信支付网关
 `$result =  (new PayClient())->Notify(intput());
 `
 $result 为退款回调通知数据
+
+
+
+## 支付宝相关支付
+
+开发中。。
