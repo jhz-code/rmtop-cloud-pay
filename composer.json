@@ -1,0 +1,31 @@
+{
+    "name": "rmtop/rmsf-cloud-pay",
+    "description": "\"pay mananage\"",
+    "require": {
+        "topthink/think-migration": "^3.0",
+        "wechatpay/wechatpay-guzzle-middleware": "^0.2.0",
+        "guzzlehttp/guzzle": "~6.0",
+        "alipaysdk/easysdk":"^2.2.0",
+
+      "ext-json": "*",
+        "ext-openssl": "*"
+    },
+    "authors": [
+        {
+            "name": "zjh",
+            "email": "hezuo@ynrmsf.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "RmTop\\RmPay\\": "src/"
+        }
+    },
+    "extra": {
+        "think": {
+            "services": [
+                "RmTop\\RmPay\\RmPayService"
+            ]
+        }
+    }
+}
