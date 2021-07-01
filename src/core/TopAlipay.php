@@ -8,7 +8,7 @@ use Alipay\EasySDK\Kernel\Util\ResponseChecker;
 use RmTop\RmPay\lib\alipay\AlipayPayClient;
 use think\Exception;
 
-class TopAlipay extends AlipayPayClient
+class TopAlipay
 {
 
 
@@ -17,9 +17,10 @@ class TopAlipay extends AlipayPayClient
     /**
      * AliPay constructor.
      */
-    public function __construct()
+    public function __construct($configId)
     {
-        $this->aliClient = $this->aliClient();
+        $aliClient = new AlipayPayClient($configId);
+        $this->aliClient = $aliClient->aliClient();
     }
 
 
@@ -133,9 +134,6 @@ class TopAlipay extends AlipayPayClient
      * 支付回调
      */
     function notify($content){
-        // Log::write(json_encode($content)."__________");
-        // Log::write($this->aliClient::payment()->common()->verifyNotify($content)."***");
-        unset($content['fuc']);
         if($this->aliClient::payment()->common()->verifyNotify($content)){
             //处理数据
             exit("success");
