@@ -153,6 +153,20 @@ $result 为退款回调通知数据
 
 ## 支付宝
 
+
+~~~ 
+支付宝配置
+
+$data['appId'] = '15196xxxx';
+$data['merchantPrivateKey'] = '6A6E499099E0F19FE334Cxxxxxxxx';
+$data['alipayPublicKey'] = 'xN5nxxxxxxxxx;
+$data['notifyUrl'] = 'xN5nxxxxxxxxx;
+$data['encryptKey'] = 'xN5nxxxxxxxxx;
+TopPayConfig::addConfig($data);
+
+
+~~~
+
 ~~~
 
 支付宝 PC端扫码支付
