@@ -136,5 +136,13 @@ $result 为退款回调通知数据
 
 ~~~
 
+支付宝 PC端扫码支付
+$configId = 1;
+$orderdes = '';
+$order_sn = '';
+$money = '';
+$aliPay = new TopAlipay($configId);
+$result =  $aliPay->appPay($orderdes,$order_sn,$money);
+return $result;
 
 ~~~
