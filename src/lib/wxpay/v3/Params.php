@@ -39,6 +39,7 @@ class Params
     public  $funds_amount =[];
     public  $funds_goods_detail = [];
     public  $pay_config = [];
+    public  $pay_config_id = '';//配置项ID
 
 
 
@@ -49,6 +50,7 @@ class Params
     function getParams(): array
     {
         return  $params =  [
+            'pay_config_id'=>$this->pay_config_id,
             'pay_config' => $this->pay_config,
             'appid'=>$this->appId,
             'mchid'=>$this->mchid,
@@ -84,6 +86,7 @@ class Params
      */
     function setConfigId(int $configId){
         $result = TopPayConfig::getConfig($configId);
+        $this->pay_config_id = $configId;
         $this->pay_config = $result ;
     }
 

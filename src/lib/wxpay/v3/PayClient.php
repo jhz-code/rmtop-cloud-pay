@@ -26,6 +26,20 @@ class PayClient
     protected $apiV3key = '';
     protected $merchantPrivateKey; //商户私钥;
     protected $wechatpayCertificate;  //微信支付平台证书;
+    protected $payConfigId = ''; //支付配置ID
+    protected $cerficateName='';//证书名称
+
+
+    /**
+     * 设置支付相关参数
+     */
+    function setParams($params){
+        $this->merchantId = $params['pay_config']['merchantId'] ;
+        $this->merchantSerialNumber =$params['pay_config']['merchantSerialNumber']  ;
+        $this->apiV3key = $params['pay_config']['apiV3key'] ;
+        $this->payConfigId = $params['pay_config_id'];
+        $this->cerficateName = $params['pay_config']['serial_no'] ;
+    }
 
 
     /**
@@ -36,12 +50,11 @@ class PayClient
      * @return array|void
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    function requestParams(string $url,string $type = 'post',$params){
-// 接下来，正常使用Guzzle发起API请求，WechatPayMiddleware会自动地处理签名和验签
-        $this->merchantId = $params['pay_config']['merchantId'] ;
-        $this->merchantSerialNumber =$params['pay_config']['merchantSerialNumber']  ;
-        $this->apiV3key = $params['pay_config']['apiV3key'] ;
+    function requestParams(string $url,string $type,$params){
+        // 接下来，正常使用Guzzle发起API请求，WechatPayMiddleware会自动地处理签名和验签
+        $this->setParams($params);
         unset($params['pay_config']);//删除配置项
+        unset($params['pay_config_id']);//删除配置项
         try{
             if($type == "get"){
                 $resp =  $this->buildGetHttp($url,$params);
@@ -96,8 +109,6 @@ class PayClient
 
     }
 
-
-
     /**
      * 加载证书
      */
@@ -106,9 +117,7 @@ class PayClient
     }
 
 
-
     /**
-     * @param false $first 是否是第一获取证书，true为是
      * @return Client
      */
     function getClient($first = false): Client
@@ -116,12 +125,12 @@ class PayClient
         // 构造一个WechatPayMiddleware
         $this->getMerchant();//获取证书
         $wechatpayMiddleware = WechatPayMiddleware::builder()->withMerchant($this->merchantId, $this->merchantSerialNumber, $this->merchantPrivateKey); // 传入商户相关配置
-        if(!$first){
+        if($first){
             //如果不是第一次，则调用证书开始验签
-            $this->wechatpayCertificate =  PemUtil::loadCertificate(dirname(__DIR__).'/prvate/'.'cert'.DIRECTORY_SEPARATOR.'wechatpay_327B4963545B0215E88749B65404A2E16148F82A.pem'); // 微信支付平台证书 ; // 商户私钥
-            $wechatpayMiddleware->withWechatPay([$this->wechatpayCertificate]); // 可传入多个微信支付平台证书，参数类型为array
-        }else{
             $wechatpayMiddleware->withValidator(new NoopValidator); // 临时"跳过”应答签名的验证
+        }else{
+            $this->wechatpayCertificate =  PemUtil::loadCertificate(dirname(__DIR__).'/prvate/'.'cert'.DIRECTORY_SEPARATOR.$this->cerficateName.'.pem'); // 微信支付平台证书 ; // 商户私钥
+            $wechatpayMiddleware->withWechatPay([$this->wechatpayCertificate]); // 可传入多个微信支付平台证书，参数类型为array
         }
         // 将WechatPayMiddleware添加到Guzzle的HandlerStack中
         $stack = HandlerStack::create();
@@ -129,6 +138,7 @@ class PayClient
         // 创建Guzzle HTTP Client时，将HandlerStack传入
         return new Client(['handler' => $stack]);
     }
+
 
 
 
@@ -161,9 +171,10 @@ class PayClient
      * @return mixed
      * @throws Exception
      */
-     function Notify($request){
-        $decrypted = new AesUtil($this->apiV3key);
-        $resource = $request['resource'];
+    function Notify(string $apiV3key,$request){
+        $decrypted = new AesUtil($apiV3key);
+        $resource = $request['resource']??"";
+        if(!$resource)throw new Exception("not found");
         $plain = $decrypted->decryptToString(
             $resource['associated_data'],
             $resource['nonce'],
@@ -175,9 +186,9 @@ class PayClient
             $result = json_decode($plain,true);
             if($result['trade_state']){
                 return $result;  //返回支付成功的信息
-             //   exit(json(['code'=>'SUCCESS','message'=>'']));
+                //   exit(json(['code'=>'SUCCESS','message'=>'']));
             }else{
-                exit(json(['code'=>'Error','message'=>'订单未支付成功,拒绝处理']));
+                throw new Exception('单未支付成功,拒绝处理');
             }
         }
 
@@ -203,6 +214,8 @@ class PayClient
             return json_decode($plain,true);
         }
     }
+
+
 
 
 }

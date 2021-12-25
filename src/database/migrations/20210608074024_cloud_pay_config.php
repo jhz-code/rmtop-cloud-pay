@@ -91,6 +91,7 @@ class CloudPayConfig extends Migrator
         $table = $this->table("rm_cloud_pay_config");
         $table->addColumn('type', 'string', ['limit' =>50,'default'=>'0','comment'=>'配置类型 支付宝、微信'])
             ->addColumn('config_text', 'string', ['limit' => 200,'default'=>'','comment'=>'配置'])
+            ->addColumn('serial_no', 'string', ['limit' => 200,'default'=>'','comment'=>'证书编号'])
             ->create();
     }
 

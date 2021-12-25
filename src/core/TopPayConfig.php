@@ -2,6 +2,7 @@
 
 
 namespace RmTop\RmPay\core;
+use RmTop\RmPay\lib\wxpay\v3\CertificateDownloader;
 use RmTop\RmPay\model\TopPayConfigModel;
 
 /**
@@ -37,6 +38,19 @@ class TopPayConfig
         ]);
     }
 
+    /**
+     * 更新证书编号
+     * @param int $id
+     * @param $serial_no
+     * @return TopPayConfigModel
+     */
+    static function editConfigSerial_no(int $id, $serial_no)
+    {
+        return TopPayConfigModel::where(['id' => $id])->update([
+            'serial_no' => $serial_no
+        ]);
+    }
+
 
     /**
      * @param int $id
@@ -58,9 +72,18 @@ class TopPayConfig
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-  static function getConfig(int $id){
-       $result =  TopPayConfigModel::where(['id' => $id])->find();
-       return unserialize($result['config_text']);
+    static function getConfig(int $id){
+        $result =  TopPayConfigModel::where(['id' => $id])->find();
+        $res = unserialize($result['config_text']);
+        $res['serial_no'] = $result['serial_no'];
+        if(!$res['serial_no']){
+            $res['pay_config_id'] = $id;
+            (new CertificateDownloader())->checkCertificates($res);
+            return  self::getConfig($id);
+        }else{
+            return $res;
+        }
     }
+
 
 }

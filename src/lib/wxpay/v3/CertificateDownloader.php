@@ -6,6 +6,8 @@ namespace RmTop\RmPay\lib\wxpay\v3;
 
 use DateTime;
 use GuzzleHttp\Exception\GuzzleException;
+use RmTop\RmPay\core\TopPayConfig;
+use RmTop\RmPay\core\TopWxPay;
 use think\Exception;
 use WechatPay\GuzzleMiddleware\Auth\CertificateVerifier;
 use WechatPay\GuzzleMiddleware\Auth\WechatPay2Validator;
@@ -15,17 +17,21 @@ class CertificateDownloader extends PayClient
 {
 
     /**
-     * @param $first  $first 是否是第一次获取证书，true为是 默认false
      * @throws Exception
      * @throws GuzzleException
      * 定时更新证书
      */
-    function checkCertificates($first = false){
-        $client = $this->getClient($first);//第一次获取证书 初始化true  否则为空
+    function checkCertificates($data){
+        $this->merchantId = $data['merchantId'] ;
+        $this->merchantSerialNumber =$data['merchantSerialNumber']  ;
+        $this->apiV3key = $data['apiV3key'] ;
+        $this->payConfigId = $data['pay_config_id'];
+        $client = $this->getClient(true);//第一次获取证书 初始化true  否则为空
         // 接下来，正常使用Guzzle发起API请求，WechatPayMiddleware会自动地处理签名和验签
         $resp = $client->request('GET', 'https://api.mch.weixin.qq.com/v3/certificates', [
             'headers' => [ 'Accept' => 'application/json' ]
         ]);
+
         //请求失败 抛出异常
         if ($resp->getStatusCode() < 200 || $resp->getStatusCode() > 299) {
             //  echo "download failed, code={$resp->getStatusCode()}, body=[{$resp->getBody()}]\n";
@@ -66,15 +72,19 @@ class CertificateDownloader extends PayClient
         }
         // 输出证书信息，并保存到文件
         foreach ($list['data'] as $index => $item) {
-            echo "Certificate {\n";
-            echo "    Serial Number: ".$item['serial_no']."\n";
-            echo "    Not Before: ".(new DateTime($item['effective_time']))->format('Y-m-d H:i:s')."\n";
-            echo "    Not After: ".(new DateTime($item['expire_time']))->format('Y-m-d H:i:s')."\n";
-            echo "    Text: \n    ".str_replace("\n", "\n    ", $plainCerts[$index])."\n";
-            echo "}\n";
-            $outPath = dirname(__DIR__).'/prvate/'.'cert'.DIRECTORY_SEPARATOR.'wechatpay_'.$item['serial_no'].'.pem';
+//            echo "Certificate {\n";
+//            echo "    Serial Number: ".$item['serial_no']."\n";
+//            echo "    Not Before: ".(new DateTime($item['effective_time']))->format('Y-m-d H:i:s')."\n";
+//            echo "    Not After: ".(new DateTime($item['expire_time']))->format('Y-m-d H:i:s')."\n";
+//            echo "    Text: \n    ".str_replace("\n", "\n    ", $plainCerts[$index])."\n";
+//            echo "}\n";
+            $outPath = dirname(__DIR__).'/prvate/'.'cert'.DIRECTORY_SEPARATOR.$item['serial_no'].'.pem';
             file_put_contents($outPath, $plainCerts[$index]);
+            //更新证书编号
         }
+
+        TopPayConfig::editConfigSerial_no($this->payConfigId,$item['serial_no']);
+
     }
 
 
